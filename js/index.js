@@ -1,8 +1,8 @@
 const sampleUser = { id: 1, username: "pouros"}
+const bookList = document.querySelector("#list")
+const showDiv = document.querySelector("#show-panel")
+
 document.addEventListener("DOMContentLoaded", function() {
-    const listDiv = document.getElementById("#list-panel")
-    const bookList = document.querySelector("#list")
-    const showDiv = document.querySelector("#show-panel")
 
 // Fetch the books
 fetch(`http://localhost:3000/books`)
@@ -46,19 +46,16 @@ fetch(`http://localhost:3000/books`)
         showDiv.append(bookDesc)
 
         // Book users
-        console.log(book)
         let likeButton = document.createElement("button")
         likeButton.setAttribute("class", "like-button")
         likeButton.setAttribute("id", book.id)
         likeButton.innerText = "like book"
         showDiv.append(likeButton)
         likeButton.addEventListener('click', (event) => {
-            // console.log(book)
             if ((book.users.map(user => user.username)).includes(sampleUser.username)){
                 alert("You already liked this book")
             } else {
                 book.users.push(sampleUser)
-                console.log(book)
                 updateUsers(book)
             }
         })
@@ -67,9 +64,7 @@ fetch(`http://localhost:3000/books`)
     
     // Update BookUsers
     function updateUsers(book){
-        console.log(book)
-        
-        // Do a "PATCH" fetch request with updated users list
+        // Do a "PATCH" fetch request with updated users list to update book users
         fetch(`http://localhost:3000/books/${book.id}`, {
             method: "PATCH",
             headers: {
@@ -82,20 +77,18 @@ fetch(`http://localhost:3000/books`)
         })
         .then(resp => resp.json())
         .then((book) => {
-            console.log(book)
-            // debugger
-
+            // then display updated list
             showUsers(book)
-            // console.log(book)
         })
     }
 
     // Show users
     function showUsers(book){
-        // debugger
+        // create and append header
         let userListHeading = document.createElement("h3")
         userListHeading.innerText = "Users who like this book"
         showDiv.append(userListHeading)
+        // create a users ul, iterate through the users and append them
         let usersUl = document.createElement("ul")
         for (const user of book.users) {
             let userLi = document.createElement("li")
