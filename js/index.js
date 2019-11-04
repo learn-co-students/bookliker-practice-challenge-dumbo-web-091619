@@ -78,7 +78,11 @@ fetch(`http://localhost:3000/books`)
         .then(resp => resp.json())
         .then((book) => {
             // then display updated list
-            showUsers(book)
+            let updatedUserLi = document.createElement("li")
+            updatedUserLi.innerText = sampleUser.username
+            usersUl = document.getElementById("users-list")
+            usersUl.append(updatedUserLi)
+            // showUsers(book)
         })
     }
 
@@ -90,6 +94,7 @@ fetch(`http://localhost:3000/books`)
         showDiv.append(userListHeading)
         // create a users ul, iterate through the users and append them
         let usersUl = document.createElement("ul")
+        usersUl.setAttribute("id", "users-list")
         for (const user of book.users) {
             let userLi = document.createElement("li")
             userLi.innerText = user.username
